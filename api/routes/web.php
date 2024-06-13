@@ -9,7 +9,7 @@ use App\Http\Controllers\UfController;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return view('welcome');
+    return Inertia::render('Welcome');
 });
 
 Route::resource('trechos', TrechoController::class);
