@@ -1,0 +1,26 @@
+services:
+  db: 
+    image: mysql
+    container_name: dbsql
+    volumes:
+      - ./database/data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=laravel
+    restart: always
+    ports:
+      - "3306:3306"
+  
+  app:
+    build:
+      context: ./test
+      dockerfile: Dockerfile
+    container_name: app
+    volumes:
+      - ./api:/app/laravel
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+
+    

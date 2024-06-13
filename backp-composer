@@ -1,0 +1,8 @@
+FROM composer
+RUN  docker-php-ext-install pdo_mysql
+RUN composer create-project laravel/laravel
+WORKDIR /app/laravel
+RUN composer require inertiajs/inertia-laravel
+RUN composer install
+EXPOSE 8000
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
