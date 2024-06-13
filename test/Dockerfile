@@ -24,5 +24,6 @@ RUN composer install
 RUN composer require inertiajs/inertia-laravel
 
 EXPOSE 8000
+EXPOSE 5173
 
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]

@@ -8,7 +8,7 @@
     <title>Laravel with Inertia.js</title>
     <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
 </head>
-<body>
+<body class="font-sans antialiased">
     @inertia
     <script src="{{ mix('/js/app.js') }}"></script>
 </body>
