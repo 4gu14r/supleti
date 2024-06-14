@@ -1,7 +1,5 @@
 FROM ubuntu
 
-WORKDIR /app/laravel
-
 # Atualize o sistema e instale as dependências necessárias
 RUN apt-get update \
     && apt-get install -y curl git zip unzip php php-cli php-mysql php-xml php-dom
@@ -12,6 +10,14 @@ RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
 
 # Instale o Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Definindo o path de trabalho
+WORKDIR /app/laravel
+COPY ./api /app/laravel/
+
+# Instalando os Path de Dependências.
+RUN composer install
+RUN npm install
 
 # Expõe as portas necessárias
 EXPOSE 8000
