@@ -16,8 +16,8 @@
       </thead>
       <tbody>
         <tr v-for="trecho in trechos.data" :key="trecho.id">
-          <td>{{ trecho.uf_id }}</td> 
-          <td>{{ trecho.rodovia_id }}</td> 
+          <td>{{ trecho.uf.sigla }}</td> 
+          <td>{{ trecho.rodovia.nome}}</td> 
           <td>{{ trecho.quilometragem_inicial }}</td>
           <td>{{ trecho.quilometragem_final }}</td>
           <td>

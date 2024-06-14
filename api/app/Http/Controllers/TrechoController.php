@@ -8,6 +8,7 @@ use App\Models\Rodovia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+
 class TrechoController extends Controller
 {
     public function index()
@@ -30,7 +31,6 @@ class TrechoController extends Controller
 
     public function store(Request $request)
     {
-        // Validação dos dados do formulário
         $request->validate([
             'data_referencia' => 'required|date',
             'uf_id' => 'required|exists:ufs,id',
@@ -39,10 +39,8 @@ class TrechoController extends Controller
             'quilometragem_final' => 'required|numeric|gte:quilometragem_inicial',
         ]);
 
-        // Cria um novo trecho com os dados do formulário
         Trecho::create($request->all());
 
-        // Redireciona de volta para a página de listagem de trechos
         return Redirect::route('trechos.index')->with('success', 'Trecho criado com sucesso.');
     }
 
@@ -68,30 +66,40 @@ class TrechoController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Validação dos dados do formulário
-        $request->validate([
-            'data_referencia' => 'required|date',
-            'uf_id' => 'required|exists:ufs,id',
-            'rodovia_id' => 'required|exists:rodovias,id',
-            'quilometragem_inicial' => 'required|numeric',
-            'quilometragem_final' => 'required|numeric|gte:quilometragem_inicial',
-        ]);
 
-        // Encontra o trecho existente e atualiza com os dados do formulário
-        $trecho = Trecho::findOrFail($id);
-        $trecho->update($request->all());
+        try {
+            $request->validate([
+                'data_referencia' => 'required|date',
+                'uf_id' => 'required|exists:ufs,id',
+                'rodovia_id' => 'required|exists:rodovias,id',
+                'quilometragem_inicial' => 'required|numeric',
+                'quilometragem_final' => 'required|numeric|gte:quilometragem_inicial',
+            ]);
 
-        // Redireciona de volta para a página de listagem de trechos
-        return Redirect::route('trechos.index')->with('success', 'Trecho atualizado com sucesso.');
+            $trecho = Trecho::findOrFail($id);
+            $trecho->update($request->all());
+
+            return Redirect::route('trechos.index')->with('success', 'Trecho atualizado com sucesso.');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Redirect::route('trechos.index')->with('error', 'Trecho não encontrado.');
+        } catch (\Exception $e) {
+            return Redirect::route('trechos.index')->with('error', 'Erro ao atualizar o trecho.');
+        }
+
     }
 
     public function destroy($id)
     {
 
-        $trecho = Trecho::findOrFail($id);
-        $trecho->delete();
+        try {
+            $trecho = Trecho::findOrFail($id);
+            $trecho->delete();
 
-        
-        return Redirect::route('trechos.index');
+            return Redirect::route('trechos.index')->with('success', 'Trecho deletado com sucesso.');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return Redirect::route('trechos.index')->with('error', 'Trecho não encontrado.');
+        } catch (\Exception $e) {
+            return Redirect::route('trechos.index')->with('error', 'Erro ao deletar o trecho.');
+        }
     }
 }
