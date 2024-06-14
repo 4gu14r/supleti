@@ -29,11 +29,11 @@
                             <td>{{ $trecho->quilometragem_inicial }}</td>
                             <td>{{ $trecho->quilometragem_final }}</td>
                             <td>
-                                <!-- Link para exibir -->
+                                
                                 <a href="{{ route('trechos.show', $trecho->id) }}" class="btn btn-info">Ver</a>
 
                                 <a href="{{ route('trechos.edit', $trecho->id) }}" class="btn btn-sm btn-primary">Editar</a>
-                                <!-- Formulário de exclusão -->
+                                
                                 <form action="{{ route('trechos.destroy', $trecho->id) }}" method="POST"
                                     style="display: inline-block;">
                                     @csrf
@@ -47,7 +47,7 @@
                 </tbody>
             </table>
 
-            {{ $trechos->links() }} <!-- Links de paginação -->
+            {{ $trechos->links() }}
         </div>
     @endsection
 
