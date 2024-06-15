@@ -27,7 +27,7 @@ EXPOSE 5173
 COPY start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
 
-# Converta quebras de linha e defina permissões de execução para executar no windows
+# Converta quebras de linha e para executar no windows
 RUN sed -i 's/\r$//' /usr/local/bin/start.sh && chmod +x /usr/local/bin/start.sh
 
 # Defina o comando de inicialização
