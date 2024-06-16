@@ -2,7 +2,7 @@
   <div class="container">
     <h2>Editar Trecho</h2>
 
-    <form @submit.prevent="submitForm">
+    <form @submit.prevent="form.post(`/trechos/${trecho.id}`)">
       <div class="form-group">
         <label for="data_referencia">Data de Referência:</label>
         <input v-model="form.data_referencia" type="date" id="data_referencia" class="form-control">
@@ -16,7 +16,7 @@
       <div class="form-group">
         <label for="rodovia_id">Rodovia:</label>
         <select v-model="form.rodovia_id" id="rodovia_id" class="form-control">
-          <option v-for="rodovia in rodovias" :key="rodovia.id" :value="rodovia.id">{{ rodovia.rodovia }}</option>
+          <option v-for="rodovia in filteredRodovias" :key="rodovia.id" :value="rodovia.id">{{ rodovia.rodovia }}</option>
         </select>
       </div>
       <div class="form-group">
@@ -34,8 +34,8 @@
 </template>
 
 <script setup>
-import { defineProps, reactive, onMounted } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { defineProps, onMounted, computed } from 'vue';
+import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
   trecho: Object,
@@ -43,7 +43,8 @@ const props = defineProps({
   rodovias: Array,
 });
 
-const form = reactive({
+const form = useForm({
+  _method: 'put',
   data_referencia: null,
   uf_id: null,
   rodovia_id: null,
@@ -51,8 +52,11 @@ const form = reactive({
   quilometragem_final: null,
 });
 
+const filteredRodovias = computed(() => {
+  return props.rodovias.filter(rodovia => rodovia.uf_id === form.uf_id);
+});
+
 onMounted(() => {
-  // Preenche o formulário com os dados do trecho que está sendo editado
   form.data_referencia = props.trecho.data_referencia;
   form.uf_id = props.trecho.uf_id;
   form.rodovia_id = props.trecho.rodovia_id;
@@ -60,18 +64,4 @@ onMounted(() => {
   form.quilometragem_final = props.trecho.quilometragem_final;
 });
 
-const submitForm = () => {
-  router.put(route('trechos.update', { id: props.trecho.id }), form);
-};
-
-const route = (name, params = {}) => {
-  switch (name) {
-    case 'trechos.update':
-      return `/trechos/${params.id}`;
-    case 'trechos.index':
-      return '/trechos';
-    default:
-      return '/';
-  }
-};
 </script>

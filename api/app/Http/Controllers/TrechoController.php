@@ -14,7 +14,7 @@ class TrechoController extends Controller
 {
     public function index()
     {
-        $trechos = Trecho::with(['uf', 'rodovia'])->paginate(10); // Paginação com 10 registros por página
+        $trechos = Trecho::with(['uf', 'rodovia'])->paginate(10); 
         return Inertia::render('trechos/Index', [
             'trechos' => $trechos
         ]);
@@ -91,20 +91,41 @@ class TrechoController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $request->validate([
-            'data_referencia' => 'required|date',
-            'uf_id' => 'required|exists:ufs,id',
-            'rodovia_id' => 'required|exists:rodovias,id',
-            'quilometragem_inicial' => 'required|numeric',
-            'quilometragem_final' => 'required|numeric|gte:quilometragem_inicial',
-        ]);
+{
+    $request->validate([
+        'data_referencia' => 'required|date',
+        'uf_id' => 'required|exists:ufs,id',
+        'rodovia_id' => 'required|exists:rodovias,id',
+        'quilometragem_inicial' => 'required|numeric',
+        'quilometragem_final' => 'required|numeric|gte:quilometragem_inicial',
+    ]);
 
-        $trecho = Trecho::findOrFail($id);
-        $trecho->update($request->all());
+    $trecho = Trecho::findOrFail($id);
 
-        return Redirect::route('trechos.index')->with('success', 'Trecho atualizado com sucesso.');
+    $trecho->update($request->all());
+
+    $uf = Uf::find($request->uf_id);
+    $rodovia = Rodovia::find($request->rodovia_id);
+
+    $response = Http::get('https://servicos.dnit.gov.br/sgplan/apigeo/rotas/espacializarlinha', [
+        'br' => $rodovia->rodovia,
+        'tipo' => 'B',
+        'uf' => $uf->uf,
+        'cd_tipo' => 'null',
+        'data' => $request->data_referencia,
+        'kmi' => $request->quilometragem_inicial,
+        'kmf' => $request->quilometragem_final,
+    ]);
+
+    if ($response->successful()) {
+        $trecho->geo = $response->body();
+        $trecho->save();
+
+        return Redirect::route('trechos.show', ['trecho' => $trecho->id])->with('success', 'Trecho atualizado com sucesso.');
+    } else {
+        return back()->withErrors(['api' => 'Falha ao obter dados da API.']);
     }
+}
 
     public function destroy($id)
     {

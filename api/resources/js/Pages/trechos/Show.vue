@@ -10,10 +10,10 @@
                 <p class="card-text">KM Final: {{ trecho.quilometragem_final }}</p>
 
                 <div>
-                    <a :href="route('trechos.index')" class="btn btn-info">Voltar para Lista</a>
-                    <a :href="route('trechos.edit', { id: trecho.id })" class="btn btn-primary">Editar</a>
+                    <Link :href="'/trechos'" class="btn btn-info">Voltar para a lista</Link>
+                    <Link :href="'/trechos/' + trecho.id + '/edit'" class="btn btn-primary">Editar</Link>
 
-                    <form @submit.prevent="deleteTrecho(trecho.id)" style="display: inline-block;">
+                    <form @submit.prevent="form.post(`/trechos/${trecho.id}`)" style="display: inline-block;">
                         <button type="submit" class="btn btn-danger">Excluir</button>
                     </form>
                 </div>
@@ -27,31 +27,12 @@
 <script setup>
 import { defineProps, onMounted } from 'vue';
 import L from 'leaflet';
-import { Inertia } from '@inertiajs/inertia';
 
 const props = defineProps(['trecho']);
 
-const route = (name, params = {}) => {
-    switch (name) {
-        case 'trechos.index':
-            return '/trechos';
-        case 'trechos.edit':
-            return `/trechos/${params.id}/edit`;
-        case 'trechos.destroy':
-            return `/trechos/${params.id}`;
-        default:
-            return '/';
-    }
-};
 
-const deleteTrecho = (id) => {
-    if (confirm('Tem certeza que deseja deletar este trecho?')) {
-        Inertia.delete(route('trechos.destroy', { id })).then(() => {
-            Inertia.visit(route('trechos.index'));
-        });
-    }
-};
 
+/* ------------- MAPA ----------------*/
 onMounted(() => {
     const geoJSONData = JSON.parse(props.trecho.geo);
 
@@ -64,7 +45,7 @@ onMounted(() => {
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</Link>'
     }).addTo(map);
 
     const geoLayer = L.geoJSON(geoJSONData, {
@@ -77,6 +58,23 @@ onMounted(() => {
 
     map.fitBounds(geoLayer.getBounds());
 });
+
+/* ------------- MAPA ----------------*/
+</script>
+
+
+<script>
+import { Link, useForm } from '@inertiajs/vue3';
+
+const form = useForm({
+  _method: 'delete',
+});
+
+export default {
+  components: {
+    Link
+  }
+}
 </script>
 
 <style>

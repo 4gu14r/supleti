@@ -50,7 +50,6 @@ const form = reactive({
   quilometragem_final: null,
 });
 
-// Computed property to filter rodovias based on the selected UF
 const filteredRodovias = computed(() => {
   return props.rodovias.filter(rodovia => rodovia.uf_id === form.uf_id);
 });

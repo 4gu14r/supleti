@@ -23,7 +23,7 @@ Esta ferramenta levanta um ambiente de desenvolvimento para o projeto criado.
 -  Clone o repositório do projeto:
 
     ```sh
-    git clone https://github.com/5gu14r/supleti.git
+    git clone https://github.com/4gu14r/supleti.git
     ```
 
 
@@ -65,7 +65,7 @@ Os dados do banco de dados MySQL são persistidos no diretório `./database/data
     php artisan migrate
     ```
 
-- **Portas em Uso**: Verifique se as portas `8000` não estão sendo usadas por outros serviços.
+- **Portas em Uso**: Verifique se as portas `8000` e `3306` não estão sendo usadas por outros serviços.
 
 ## Parando os Contêineres
 
