@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('rodovias', function (Blueprint $table) {
             $table->id();
-            $table->string('nome');
+            $table->foreignId('uf_id')->constrained('ufs');
+            $table->string('rodovia', 100)->notNullable();
             $table->timestamps();
         });
     }

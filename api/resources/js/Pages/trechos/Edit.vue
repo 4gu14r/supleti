@@ -10,13 +10,13 @@
       <div class="form-group">
         <label for="uf_id">UF:</label>
         <select v-model="form.uf_id" id="uf_id" class="form-control">
-          <option v-for="uf in ufs" :key="uf.id" :value="uf.id">{{ uf.sigla }}</option>
+          <option v-for="uf in ufs" :key="uf.id" :value="uf.id">{{ uf.uf }}</option>
         </select>
       </div>
       <div class="form-group">
         <label for="rodovia_id">Rodovia:</label>
         <select v-model="form.rodovia_id" id="rodovia_id" class="form-control">
-          <option v-for="rodovia in rodovias" :key="rodovia.id" :value="rodovia.id">{{ rodovia.nome }}</option>
+          <option v-for="rodovia in rodovias" :key="rodovia.id" :value="rodovia.id">{{ rodovia.rodovia }}</option>
         </select>
       </div>
       <div class="form-group">
@@ -35,7 +35,7 @@
 
 <script setup>
 import { defineProps, reactive, onMounted } from 'vue';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps({
   trecho: Object,
@@ -61,7 +61,7 @@ onMounted(() => {
 });
 
 const submitForm = () => {
-  Inertia.put(route('trechos.update', { id: props.trecho.id }), form);
+  router.put(route('trechos.update', { id: props.trecho.id }), form);
 };
 
 const route = (name, params = {}) => {

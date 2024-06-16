@@ -15,6 +15,7 @@
         "@inertiajs/inertia-vue3": "^0.6.0",
         "@inertiajs/vue3": "^1.2.0",
         "@vitejs/plugin-vue": "^5.0.5",
+        "leaflet": "^1.9.4",
         "ziggy-js": "^2.2.1"
     }
 }

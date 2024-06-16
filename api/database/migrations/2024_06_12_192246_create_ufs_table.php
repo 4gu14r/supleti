@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('ufs', function (Blueprint $table) {
             $table->id();
-            $table->string('sigla', 2)->unique();
-            $table->string('nome');
+            $table->string('uf', 2)->unique();
             $table->timestamps();
         });
     }

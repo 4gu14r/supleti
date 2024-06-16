@@ -16,6 +16,7 @@ class Trecho extends Model
         'tipo_trecho',
         'quilometragem_inicial',
         'quilometragem_final',
+        'geo',
     ];
 
     public function uf()

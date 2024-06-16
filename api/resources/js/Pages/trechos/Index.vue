@@ -1,8 +1,11 @@
 <template>
+
+  <div class="container">
+  </div>
   <div class="container">
     <h2>Listagem de Trechos</h2>
 
-    <a :href="route('trechos.create')" class="btn btn-primary mb-2">Novo Trecho</a>
+    <a :href="route('trechos.create')" class="btn btn-warning mb-3">Novo Trecho</a>
 
     <table class="table">
       <thead>
@@ -16,13 +19,13 @@
       </thead>
       <tbody>
         <tr v-for="trecho in trechos.data" :key="trecho.id">
-          <td>{{ trecho.uf.sigla }}</td> 
-          <td>{{ trecho.rodovia.nome}}</td> 
+          <td>{{ trecho.uf.uf }}</td> 
+          <td>{{ trecho.rodovia.rodovia}}</td> 
           <td>{{ trecho.quilometragem_inicial }}</td>
           <td>{{ trecho.quilometragem_final }}</td>
           <td>
             <a :href="route('trechos.show', { id: trecho.id })" class="btn btn-info">Ver</a>
-            <a :href="route('trechos.edit', { id: trecho.id })" class="btn btn-sm btn-primary">Editar</a>
+            <a :href="route('trechos.edit', { id: trecho.id })" class="btn btn-primary">Editar</a>
             
             <!-- Formulário para exclusão -->
             <form @submit.prevent="deleteTrecho(trecho.id)" style="display: inline-block;">
@@ -37,7 +40,7 @@
 
 <script setup>
 import { defineProps } from 'vue';
-import { Inertia } from '@inertiajs/inertia';
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps(['trechos']);
 
@@ -58,9 +61,7 @@ const route = (name, params = {}) => {
 
 const deleteTrecho = (id) => {
   if (confirm('Tem certeza que deseja deletar este trecho?')) {
-    Inertia.delete(route('trechos.destroy', { id })).then(() => {
-      Inertia.reload();
-    });
+    router.delete(route('trechos.destroy', { id }))
   }
 };
 </script>
